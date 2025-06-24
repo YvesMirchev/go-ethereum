@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  ethereum:
+    image: {DOCKER_IMAGE_TAG}
+    container_name: ethereum-devnet
+    command: geth --dev --rpc --rpcapi db,eth,net,web3,personal --rpcaddr 0.0.0.0 --rpcport 8545 --rpccorsdomain '*'
+    ports:
+      - '8545:8545'
+    volumes:
+      - ethereum_data:/root/.ethereum
+    networks:
+      - devnet
+volumes:
+  ethereum_data:
+    driver: local
+networks:
+  devnet:
+    driver: bridge
