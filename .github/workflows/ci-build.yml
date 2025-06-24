@@ -44,6 +44,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Docker Compose
+        uses: docker/setup-compose-action@v1
+        with:
+          version: latest
+
       - name: Set up Docker Compose file
         run: |
           cp docker-compose.template.yaml docker-compose.yml
