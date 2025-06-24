@@ -8,9 +8,10 @@ on:
       - main
   workflow_dispatch:
 
+# Comment
 jobs:
   build:
-    if: ${{ github.event.label.name == 'CI:Build' }}
+    if: ${{ github.event.label.name == 'CI:Build' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
 
     steps:
