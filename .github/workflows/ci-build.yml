@@ -46,7 +46,7 @@ jobs:
 
       - name: Set up Docker Compose file
         run: |
-          cp docker-compose.template.yml docker-compose.yml
+          cp docker-compose.template.yaml docker-compose.yml
           
           # Replace the placeholder with the actual image tag
           sed -i 's|{DOCKER_IMAGE_TAG}|${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_REPOSITORY }}:${{ github.sha }}|g' docker-compose.yml
