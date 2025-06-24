@@ -24,20 +24,20 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
+          username: ${{ env.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }} .
-          docker tag ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/go-ethereum:latest
+          docker build -t ${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_REPOSITORY }}:${{ github.sha }} .
+          docker tag ${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_REPOSITORY }}:${{ github.sha }} ${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_REPOSITORY }}:latest
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
+          docker push ${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_REPOSITORY }}:${{ github.sha }}
+          docker push ${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_REPOSITORY }}:latest
         env:
-          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_HUB_USERNAME: ${{ env.DOCKER_USERNAME }}
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
   docker_compose:
@@ -54,7 +54,7 @@ jobs:
           cp docker-compose.template.yml docker-compose.yml
           
           # Replace the placeholder with the actual image tag
-          sed -i 's|{DOCKER_IMAGE_TAG}|${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}|g' docker-compose.yml
+          sed -i 's|{DOCKER_IMAGE_TAG}|${{ env.DOCKER_USERNAME }}/${{ env.DOCKER_REPOSITORY }}:${{ github.sha }}|g' docker-compose.yml
 
       - name: Run Docker Compose for devnet
         run: |
