@@ -80,6 +80,7 @@ jobs:
       - name: Compile contracts
         run: |
           cd hardhat
+          npx hardhat node
           npx hardhat compile
           npx hardhat ignition deploy ./ignition/modules/Lock.js --network localhost
 
