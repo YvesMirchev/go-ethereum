@@ -70,6 +70,13 @@ jobs:
           cd hardhat
           npm install
 
+      - name: Wait for Ethereum node to be ready
+        run: |
+          until curl -s --head http://localhost:8545 | head -n 1 | grep "HTTP/1.1 200 OK" > /dev/null; do
+            echo "Waiting for Ethereum node to be ready..."
+            sleep 5
+          done
+
       - name: Compile contracts
         run: |
           cd hardhat
