@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: go-ethereum-deployment
-  labels:
-    app: go-ethereum
 spec:
   replicas: 1
   selector:
@@ -14,48 +12,14 @@ spec:
       labels:
         app: go-ethereum
     spec:
-    containers:
-    - name: go-ethereum
-      image: kubemirchev/go-ethereum:latest
-      ports:
-      - containerPort: 8545
-      - containerPort: 30303
-      env:
-      - name: ETHEREUM_NETWORK_NAME
-        value: "devnet"
-      - name: ETHEREUM_JSONRPC_HTTP_URL
-        value: "http://127.0.0.1:8545"
-      volumeMounts:
-      - name: ethereum-data
-        mountPath: /root/.ethereum
-    volumes:
-    - name: ethereum-data
-      persistentVolumeClaim:
-        claimName: ethereum-pvc
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: go-ethereum-service
-spec:
-  selector:
-    app: go-ethereum
-  ports:
-    - protocol: TCP
-      port: 8545
-      targetPort: 8545
-    - protocol: TCP
-      port: 30303
-      targetPort: 30303
-  type: LoadBalancer
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: ethereum-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
+      containers:
+        - name: go-ethereum
+          image: "kubemirchev/go-ethereum:latest"
+          ports:
+            - containerPort: 8545
+            - containerPort: 30303
+          env:
+            - name: ETHEREUM_JSONRPC_HTTP_URL
+              value: "http://127.0.0.1:8545"
+            - name: ETHEREUM_NETWORK_NAME
+              value: "devnet"
