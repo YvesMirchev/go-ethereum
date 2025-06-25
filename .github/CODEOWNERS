@@ -6,7 +6,7 @@ accounts/scwallet/              @gballet
 accounts/abi/                   @gballet @MariusVanDerWijden
 beacon/engine/                  @MariusVanDerWijden @lightclient @fjl
 beacon/light/                   @zsfelfoldi
-beacon/merkle/                  @zsfelfoldi 
+beacon/merkle/                  @zsfelfoldi
 beacon/types/                   @zsfelfoldi @fjl
 beacon/params/                  @zsfelfoldi @fjl
 cmd/evm/                        @MariusVanDerWijden @lightclient

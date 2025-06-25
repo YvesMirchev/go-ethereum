@@ -6,7 +6,7 @@ Please see [Releases](https://github.com/ethereum/go-ethereum/releases). We reco
 
 ## Audit reports
 
-Audit reports are published in the `docs` folder: https://github.com/ethereum/go-ethereum/tree/master/docs/audits 
+Audit reports are published in the `docs` folder: https://github.com/ethereum/go-ethereum/tree/master/docs/audits
 
 | Scope | Date | Report Link |
 | ------- | ------- | ----------- |
