@@ -1,11 +1,17 @@
 version: '3.7'
 services:
   ethereum:
-    image: {DOCKER_IMAGE_TAG}
+    #image: ./Dockerfile.alltools
+    build:
+      context: .
+      dockerfile: ./Dockerfile.alltools
     container_name: ethereum-devnet
-    command: geth --dev --rpc --rpcapi db,eth,net,web3,personal --rpcaddr 0.0.0.0 --rpcport 8545 --rpccorsdomain '*'
+    #command: geth --dev --http --http.api db,eth,net,web3,personal,admin,txpool --http.addr 0.0.0.0 --http.port 8545 --http.corsdomain '*'
+    #command: geth --dev --http --http.addr 127.0.0.1 --http.port 8545 --http.api admin,debug,web3,eth,txpool,miner,net,personal --authrpc.jwtsecret /dev/null --allow-insecure-unlock --ipcdisable --nodiscover --mine --verbosity 3
+    command: geth --http --http.port="8545" --http.corsdomain="*" --http.api="personal,eth,net,web3" --allow-insecure-unlock --datadir chain --nodiscover
     ports:
       - '8545:8545'
+      - '30303:30303'
     volumes:
       - ethereum_data:/root/.ethereum
     networks:
