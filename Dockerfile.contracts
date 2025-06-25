@@ -1,0 +1,10 @@
+FROM ethereum/client-go:latest
+
+WORKDIR /root
+
+COPY ./hardhat/artifacts /root/.ethereum/contracts
+COPY ./ignition/deployments /root/.ethereum/deployments
+
+EXPOSE 8545
+
+CMD ["geth", "--dev", "--rpc", "--rpcaddr", "0.0.0.0", "--rpcport", "8545", "--rpcapi", "db,eth,net,web3,personal", "--rpccorsdomain", "*"]
