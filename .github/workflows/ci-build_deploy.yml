@@ -61,7 +61,8 @@ jobs:
           docker compose up -d
 
   deploy:
-    needs: build
+    name: Deploy Hardhat Contracts
+    needs: docker_compose
     runs-on: ubuntu-latest
     if: ${{ github.event.label.name == 'CI:Deploy' || github.event_name == 'workflow_dispatch' }}
 
