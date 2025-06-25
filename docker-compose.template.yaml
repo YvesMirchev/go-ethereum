@@ -1,24 +1,24 @@
 version: '3.7'
 services:
   ethereum:
-    #image: ./Dockerfile.alltools
-    build:
-      context: .
-      dockerfile: ./Dockerfile.alltools
-    container_name: ethereum-devnet
-    #command: geth --dev --http --http.api db,eth,net,web3,personal,admin,txpool --http.addr 0.0.0.0 --http.port 8545 --http.corsdomain '*'
-    #command: geth --dev --http --http.addr 127.0.0.1 --http.port 8545 --http.api admin,debug,web3,eth,txpool,miner,net,personal --authrpc.jwtsecret /dev/null --allow-insecure-unlock --ipcdisable --nodiscover --mine --verbosity 3
-    command: geth --http --http.port="8545" --http.corsdomain="*" --http.api="personal,eth,net,web3" --allow-insecure-unlock --datadir chain --nodiscover
+    image: {DOCKER_IMAGE_TAG}
+    # build:
+    #   context: .
+    #   dockerfile: ./Dockerfile.alltools
+    # container_name: ethereum-devnet
+    # entrypoint: /entrypoint.sh
     ports:
       - '8545:8545'
       - '30303:30303'
     volumes:
-      - ethereum_data:/root/.ethereum
-    networks:
-      - devnet
+      # - ./entrypoint.sh:/entrypoint.sh
+      # - ./genesis.json:/genesis.json
+      - ethereum_data:/tmp/geth
+    # networks:
+    #   - devnet
 volumes:
   ethereum_data:
     driver: local
-networks:
-  devnet:
-    driver: bridge
+# networks:
+#   devnet:
+#     driver: bridge

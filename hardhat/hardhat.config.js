@@ -3,11 +3,9 @@ require("@nomicfoundation/hardhat-toolbox");
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: "0.8.28",
-  // networks: {
-  //   localhost: {
-  //     url: "http://127.0.0.1:8545",
-  //     chainId: 1337,
-  //     timeout: 100000
-  //   },
-  // },
+  networks: {
+    localhost: {
+      url: "http://localhost:8545",  // Make sure this is the correct URL
+    },
+  },
 };
