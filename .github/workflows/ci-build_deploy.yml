@@ -35,7 +35,7 @@ jobs:
           push: true
           tags: ${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_REPOSITORY }}:${{ github.sha }},${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_REPOSITORY }}:latest
 
-  docker_compose:
+  deploy:
     name: Docker Compose for Local Devnet
     runs-on: ubuntu-latest
     if: ${{ github.event.label.name == 'CI:Deploy' || github.event_name == 'workflow_dispatch' }}
