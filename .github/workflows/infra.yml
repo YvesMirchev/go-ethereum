@@ -45,9 +45,9 @@ jobs:
         id: setenv
         run: |
           BRANCH_NAME="${GITHUB_REF##*/}"
-          echo "env_name=${BRANCH_NAME}" >> $GITHUB_OUTPUT
-          echo "bucket=go-ethereum-${BRANCH_NAME}-terraform-state-bucket" >> $GITHUB_OUTPUT
-          echo "key=go-ethereum/${BRANCH_NAME}/terraform.tfstate" >> $GITHUB_OUTPUT
+          echo "env_name=dev" >> $GITHUB_OUTPUT
+          echo "bucket=go-ethereum-dev-terraform-state-bucket" >> $GITHUB_OUTPUT
+          echo "key=go-ethereum/dev/terraform.tfstate" >> $GITHUB_OUTPUT
 
       - name: Terraform Init
         run: |
