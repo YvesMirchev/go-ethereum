@@ -82,6 +82,11 @@ jobs:
           npx hardhat compile
           npx hardhat ignition deploy ./ignition/modules/Lock.js --network localhost
 
+            # Step: Run Hardhat tests on the deployed contracts
+      - name: Run Hardhat Tests
+        run: |
+          cd hardhat
+          npx hardhat test --network localhost
       - name: Build and Push Docker Contract image
         uses: docker/build-push-action@v6
         with:
