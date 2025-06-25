@@ -23,7 +23,7 @@ jobs:
     environment: ${{ github.ref_name }}
     defaults:
       run:
-        working-directory: infra
+        working-directory: terraform
     outputs:
       env_name: ${{ steps.setenv.outputs.env_name }}
       bucket: ${{ steps.setenv.outputs.bucket }}
@@ -65,8 +65,8 @@ jobs:
           include-hidden-files: true
           retention-days: 1
           path: |
-            ${{ github.workspace }}/infra/.terraform
-            ${{ github.workspace }}/infra/.terraform.lock.hcl
+            ${{ github.workspace }}/terraform/.terraform
+            ${{ github.workspace }}/terraform/.terraform.lock.hcl
 
   plan:
     if: ${{ github.event.inputs.destroy != 'true' }}
@@ -75,7 +75,7 @@ jobs:
     environment: ${{ github.ref_name }}
     defaults:
       run:
-        working-directory: infra
+        working-directory: terraform
     steps:
       - uses: actions/checkout@v4
 
@@ -93,11 +93,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: terraform-init-${{ github.ref_name }}
-          path: ${{ github.workspace }}/infra
+          path: ${{ github.workspace }}/terraform
 
       - name: Restore executable permissions for Terraform providers
         run: |
-          find ${{ github.workspace }}/infra/.terraform/providers -type f -name "terraform-provider-*" -exec chmod +x {} \;
+          find ${{ github.workspace }}/terraform/.terraform/providers -type f -name "terraform-provider-*" -exec chmod +x {} \;
 
 
       - name: Terraform Format Check
@@ -107,13 +107,13 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -var-file="config/${{ github.ref_name }}/${{ github.ref_name }}.tfvars" -out="${{ github.workspace }}/infra/tfplan"
+        run: terraform plan -var-file="config/${{ github.ref_name }}/${{ github.ref_name }}.tfvars" -out="${{ github.workspace }}/terraform/tfplan"
 
       - name: Upload plan artifact
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: ${{ github.workspace }}/infra/tfplan
+          path: ${{ github.workspace }}/terraform/tfplan
 
   apply:
     needs: plan
@@ -122,7 +122,7 @@ jobs:
     if: ${{ github.event.inputs.destroy != 'true' }}
     defaults:
       run:
-        working-directory: infra
+        working-directory: terraform
     steps:
       - uses: actions/checkout@v4
 
@@ -140,17 +140,17 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: terraform-init-${{ github.ref_name }}
-          path: ${{ github.workspace }}/infra
+          path: ${{ github.workspace }}/terraform
 
       - name: Restore executable permissions for Terraform providers
         run: |
-          find ${{ github.workspace }}/infra/.terraform/providers -type f -name "terraform-provider-*" -exec chmod +x {} \;
+          find ${{ github.workspace }}/terraform/.terraform/providers -type f -name "terraform-provider-*" -exec chmod +x {} \;
 
       - name: Download plan artifact
         uses: actions/download-artifact@v4
         with:
           name: tfplan
-          path: ${{ github.workspace }}/infra
+          path: ${{ github.workspace }}/terraform
 
       - name: Terraform Apply
         run: terraform apply tfplan
@@ -180,11 +180,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: terraform-init-${{ github.ref_name }}
-          path: ${{ github.workspace }}/infra
+          path: ${{ github.workspace }}/terraform
 
       - name: Restore executable permissions for Terraform providers
         run: |
-          find ${{ github.workspace }}/infra/.terraform/providers -type f -name "terraform-provider-*" -exec chmod +x {} \;
+          find ${{ github.workspace }}/terraform/.terraform/providers -type f -name "terraform-provider-*" -exec chmod +x {} \;
 
       - name: Terraform Destroy
         run: terraform destroy -var-file="config/${{ github.ref_name }}/${{ github.ref_name }}.tfvars" -auto-approve
