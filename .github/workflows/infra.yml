@@ -13,6 +13,7 @@ on:
           - "true"
 
 env:
+  TF_ENV: "dev"
   TF_IN_AUTOMATION: true
   TF_VAR_AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   TF_VAR_AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -107,7 +108,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -var-file="config/${{ github.ref_name }}/${{ github.ref_name }}.tfvars" -out="${{ github.workspace }}/terraform/tfplan"
+        run: terraform plan -var-file="config/dev/dev.tfvars" -out="${{ github.workspace }}/terraform/tfplan"
 
       - name: Upload plan artifact
         uses: actions/upload-artifact@v4
@@ -187,4 +188,4 @@ jobs:
           find ${{ github.workspace }}/terraform/.terraform/providers -type f -name "terraform-provider-*" -exec chmod +x {} \;
 
       - name: Terraform Destroy
-        run: terraform destroy -var-file="config/${{ github.ref_name }}/${{ github.ref_name }}.tfvars" -auto-approve
+        run: terraform destroy -var-file="config/dev/dev.tfvars" -auto-approve
