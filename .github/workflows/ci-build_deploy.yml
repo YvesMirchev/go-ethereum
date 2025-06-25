@@ -38,7 +38,7 @@ jobs:
   docker_compose:
     name: Docker Compose for Local Devnet
     runs-on: ubuntu-latest
-    needs: build  
+    if: ${{ github.event.label.name == 'CI:Deploy' || github.event_name == 'workflow_dispatch' }}
 
     steps:
       - name: Checkout code
@@ -54,19 +54,12 @@ jobs:
           cp docker-compose.template.yaml docker-compose.yml
           
           # Replace the placeholder with the actual image tag
-          sed -i 's|{DOCKER_IMAGE_TAG}|${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_REPOSITORY }}:${{ github.sha }}|g' docker-compose.yml
+          sed -i 's|{DOCKER_IMAGE_TAG}|${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_REPOSITORY }}:latest|g' docker-compose.yml
 
       - name: Run Docker Compose for devnet
         run: |
           docker compose up -d
 
-  deploy:
-    name: Deploy Hardhat Contracts
-    needs: docker_compose
-    runs-on: ubuntu-latest
-    if: ${{ github.event.label.name == 'CI:Deploy' || github.event_name == 'workflow_dispatch' }}
-
-    steps:
       - name: Install packages
         uses: actions/setup-node@v4
         with:
@@ -76,13 +69,13 @@ jobs:
         run: |
           cd hardhat
           npm install
+
       - name: Compile contracts
         run: |
           cd hardhat
           npx hardhat compile
           npx hardhat ignition deploy ./ignition/modules/Lock.js --network localhost
 
-            # Step: Run Hardhat tests on the deployed contracts
       - name: Run Hardhat Tests
         run: |
           cd hardhat
